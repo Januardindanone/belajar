@@ -12,27 +12,27 @@
 
 // 2. Function Declaration
 
-const methodMahasiswa = {
-	makan : function(porsi){
-		this.energi += porsi;
-		console.log(`halo ${this.nama}, energi kamu menjadi ${this.energi}`);
-	},
-	main : function(jam) {
-		this.energi -= jam;
-		console.log(`halo ${this.nama}, energi kamu menjadi ${this.energi}`);
+// const methodMahasiswa = {
+// 	makan : function(porsi){
+// 		this.energi += porsi;
+// 		console.log(`halo ${this.nama}, energi kamu menjadi ${this.energi}`);
+// 	},
+// 	main : function(jam) {
+// 		this.energi -= jam;
+// 		console.log(`halo ${this.nama}, energi kamu menjadi ${this.energi}`);
 
-	}
-}
+// 	}
+// }
 
-function Mahasiswa(nama, energi){
-	let mahasiswa = Object.create(methodMahasiswa);
-	mahasiswa.nama = nama;
-	mahasiswa.energi = energi;
+// function Mahasiswa(nama, energi){
+// 	let mahasiswa = Object.create(methodMahasiswa);
+// 	mahasiswa.nama = nama;
+// 	mahasiswa.energi = energi;
 	
-	return mahasiswa;
-}
+// 	return mahasiswa;
+// }
 
-let danone = Mahasiswa("Danu", 10);
+// let danone = Mahasiswa("Danu", 10);
 
 
 
@@ -57,3 +57,25 @@ let danone = Mahasiswa("Danu", 10);
 
 
 // 4. Object.create
+
+
+
+function Mahasiswa(nama, energi){
+	this.nama = nama;
+	this.energi = energi;
+}
+
+Mahasiswa.prototype.makan = function(porsi){
+	this.energi += porsi;
+	return `Halo ${this.nama}, energi : ${this.energi}`;
+}
+Mahasiswa.prototype.main = function(jam){
+	this.energi -= jam;
+	return `Halo ${this.nama}, energi : ${this.energi}`;
+}
+Mahasiswa.prototype.tidur = function(jam){
+	this.energi += jam * 2;
+	return `Halo ${this.nama}, energi : ${this.energi}`;
+}
+
+let danone = new Mahasiswa('danu', 10);

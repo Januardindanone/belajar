@@ -1,0 +1,16 @@
+<h1>{{ @judul }}</h1>
+<a href="/barang/create" class="bg-green-500 text-white px-3 py-1 rounded">Tambah Barang</a>
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr><th>No</th><th>Nama</th><th>Harga</th><th>Aksi</th></tr>
+  <repeat group="{{ @barang }}" value="{{ @item }}" counter="{{ @no }}">
+    <tr>
+      <td>{{ @no }}</td>
+      <td>{{ @item.nama }}</td>
+      <td>Rp {{ @item.harga}}</td>
+      <td>
+        <a href="/barang/edit/{{ @item.id }}">Edit</a> |
+        <a href="/barang/delete/{{ @item.id }}" onclick="return confirm('Hapus barang ini?')">Hapus</a>
+      </td>
+    </tr>
+  </repeat>
+</table>

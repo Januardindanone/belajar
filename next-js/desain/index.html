@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pencatatan Penjualan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 bg-white shadow-md py-3 px-4 flex justify-between items-center">
+    <h1 class="text-lg font-bold text-blue-700">💰 Penjualan</h1>
+  </header>
+
+  <!-- Iframe konten -->
+  <main class="flex-1 bg-white">
+    <iframe id="contentFrame" src="tambah.html" class="w-full h-[calc(100vh-120px)] border-none"></iframe>
+  </main>
+
+  <!-- Navbar Bawah (Mobile Tabs) -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white shadow-inner flex justify-around border-t border-gray-200 py-2">
+    <button class="tab-btn text-center flex flex-col items-center text-xs text-gray-600" data-src="tambah.html">
+      ➕
+      <span>Tambah</span>
+    </button>
+    <button class="tab-btn text-center flex flex-col items-center text-xs text-gray-600" data-src="penjualan.html">
+      📊
+      <span>Penjualan</span>
+    </button>
+    <button class="tab-btn text-center flex flex-col items-center text-xs text-gray-600" data-src="utang.html">
+      💳
+      <span>Utang</span>
+    </button>
+    <button class="tab-btn text-center flex flex-col items-center text-xs text-gray-600" data-src="barang.html">
+      📦
+      <span>Barang</span>
+    </button>
+  </nav>
+
+  <script>
+    const buttons = document.querySelectorAll('.tab-btn');
+    const iframe = document.getElementById('contentFrame');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-src');
+        iframe.src = src;
+
+        buttons.forEach(b => b.classList.remove('text-blue-600', 'font-semibold'));
+        btn.classList.add('text-blue-600', 'font-semibold');
+      });
+    });
+
+    buttons[0].classList.add('text-blue-600', 'font-semibold');
+  </script>
+</body>
+</html>

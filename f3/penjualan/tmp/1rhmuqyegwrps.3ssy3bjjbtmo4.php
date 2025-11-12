@@ -1,0 +1,4 @@
+<h1><?= ($judul) ?></h1>
+<form method="">
+  <input type="text" name="nama barang">
+</form>

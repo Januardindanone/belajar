@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Tambah Penjualan</title>
+  <style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] { -moz-appearance: textfield; }
+  </style>
+</head>
+
+<body class="p-4 bg-white text-gray-700">
+    <h2 class="text-xl font-bold mb-3 text-blue-600 text-center">🧾 Tambah Penjualan</h2>
+
+    <form class="space-y-2" autocomplete="off" id="formPenjualan">
+      <!-- Nama Pembeli -->
+      <div>
+        <label class="block text-sm mb-0.5 font-medium text-gray-600">Nama Pembeli</label>
+        <input id="namaPembeli" type="text" placeholder="Masukkan nama pembeli"
+          class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+      </div>
+
+      <!-- Tabel Barang -->
+      <div id="tabelContainer" class="hidden mt-2">
+        <table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+          <thead class="bg-blue-50 text-gray-700">
+            <tr>
+              <th class="border p-1.5 text-left font-medium">Nama Barang</th>
+              <th class="border p-1.5 text-right font-medium">Harga</th>
+              <th class="border p-1.5 text-center font-medium">Jumlah</th>
+              <th class="border p-1.5 text-right font-medium">Total</th>
+              <th class="border p-1.5 text-center font-medium">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabelBarang"></tbody>
+          <tfoot class="bg-blue-100 font-semibold text-gray-800">
+            <tr>
+              <td colspan="4" class="border p-1.5 text-right">Total Keseluruhan</td>
+              <td id="totalKeseluruhan" class="border p-1.5 text-right">0</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Nama Barang -->
+      <div class="relative">
+        <label class="block text-sm mb-0.5 font-medium text-gray-600">Nama Barang</label>
+        <input id="namaBarang" type="text" placeholder="Ketik nama barang..."
+          class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+        <ul id="dropdownBarang"
+          class="absolute z-10 bg-white border border-gray-200 rounded-lg w-full mt-1 shadow-lg hidden max-h-40 overflow-y-auto text-sm"></ul>
+      </div>
+
+      <!-- Harga + Jumlah + Total -->
+      <div class="grid grid-cols-3 gap-1.5">
+        <div>
+          <label class="block text-sm mb-0.5 font-medium text-gray-600">Harga</label>
+          <input id="hargaSatuan" type="number" readonlyx placeholder="Otomatis"
+            class="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-600 text-sm">
+        </div>
+
+        <div>
+          <label class="block text-sm mb-0.5 font-medium text-gray-600">Jumlah</label>
+          <div class="flex items-center justify-between border border-gray-300 rounded-lg px-1 py-1 bg-white">
+            <button type="button" id="kurangBtn"
+              class="hidden bg-red-500 text-white text-lg w-8 h-8 rounded-md active:scale-95">−</button>
+            <input id="jumlahBarang" type="number" value="0"
+              class="w-full text-center border-0 focus:ring-0 focus:outline-none text-sm">
+            <button type="button" id="tambahBtn"
+              class="bg-green-500 text-white text-lg w-8 h-8 rounded-md active:scale-95">+</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-0.5 font-medium text-gray-600">Total</label>
+          <input id="totalHarga" type="number" disabled
+            class="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-600 text-sm">
+        </div>
+      </div>
+
+      <!-- Tombol Tambah Barang -->
+      <button type="button" id="btnTambahBarang"
+        class="hidden w-full bg-green-600 text-white py-2 text-sm font-medium rounded-lg hover:bg-green-700 transition active:scale-95">
+        + Tambah Barang Lain
+      </button>
+
+      <!-- Checkbox Utang -->
+      <div class="hidden flex items-center gap-2 mt-1" id="checkBoxUtang">
+        <input id="utangCheckbox" type="checkbox" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+        <label for="utangCheckbox" class="text-sm text-gray-700">Transaksi ini adalah <span
+            class="font-semibold text-blue-600">Utang</span></label>
+      </div>
+
+      <!-- Jumlah Bayar -->
+      <div id="jumlahBayarContainer" class="hidden">
+        <label class="block text-sm mb-0.5 font-medium text-gray-600">Jumlah Bayar (Rp)</label>
+        <input type="number" placeholder="Masukkan jumlah bayar"
+          class="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition">
+      </div>
+
+      <!-- Tombol Simpan -->
+      <button type="submit"
+        class="w-full bg-blue-600 text-white py-2 text-sm font-semibold rounded-lg hover:bg-blue-700 transition mt-2 active:scale-95">
+        💾 Simpan Penjualan
+      </button>
+    </form>
+  <script>
+    const namaPembeli = document.getElementById('namaPembeli');
+    const utangCheckbox = document.getElementById('utangCheckbox');
+    const jumlahBayarContainer = document.getElementById('jumlahBayarContainer');
+    const namaBarangInput = document.getElementById('namaBarang');
+    const dropdownBarang = document.getElementById('dropdownBarang');
+    const hargaSatuanInput = document.getElementById('hargaSatuan');
+    const jumlahBarangInput = document.getElementById('jumlahBarang');
+    const totalHargaInput = document.getElementById('totalHarga');
+    const tambahBtn = document.getElementById('tambahBtn');
+    const kurangBtn = document.getElementById('kurangBtn');
+    const btnTambahBarang = document.getElementById('btnTambahBarang');
+    const tabelContainer = document.getElementById('tabelContainer');
+    const tabelBarang = document.getElementById('tabelBarang');
+    const totalKeseluruhan = document.getElementById('totalKeseluruhan');
+    jumlahBarangInput.value = 1;
+
+    const barangList = [
+      { nama: "Nugget Ayam", harga: 25000 },
+      { nama: "Nasi Goreng", harga: 18000 },
+      { nama: "Rendang Daging", harga: 35000 },
+      { nama: "Minyak Goreng", harga: 14000 },
+      { nama: "Sabun Mandi", harga: 6000 },
+      { nama: "Gula Pasir", harga: 13000 },
+      { nama: "Teh Celup", harga: 8000 },
+      { nama: "Kopi Hitam", harga: 10000 },
+      { nama: "Beras Premium", harga: 55000 },
+      { nama: "Telur Ayam", harga: 28000 }
+    ];
+
+    // Fuzzy Search
+    function fuzzyMatch(text, pattern) {
+      pattern = pattern.toLowerCase();
+      text = text.toLowerCase();
+      let i = 0;
+      for (let j = 0; i < text.length && j < pattern.length; i++) {
+        if (text[i] === pattern[j]) j++;
+      }
+      return i <= text.length && pattern.length > 0;
+    }
+
+    namaBarangInput.addEventListener('input', () => {
+      const query = namaBarangInput.value.trim();
+      dropdownBarang.innerHTML = '';
+      if (query === '') return dropdownBarang.classList.add('hidden');
+
+      const hasil = barangList.filter(b => fuzzyMatch(b.nama, query));
+      if (hasil.length === 0) return dropdownBarang.classList.add('hidden');
+
+      hasil.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.nama} - Rp${item.harga.toLocaleString()}`;
+        li.className = 'p-2 hover:bg-blue-100 cursor-pointer text-gray-700';
+        li.addEventListener('click', () => {
+          namaBarangInput.value = item.nama;
+          hargaSatuanInput.value = item.harga;
+          updateTotal();
+          dropdownBarang.classList.add('hidden');
+        });
+        dropdownBarang.appendChild(li);
+      });
+      dropdownBarang.classList.remove('hidden');
+    });
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#namaBarang')) dropdownBarang.classList.add('hidden');
+    });
+
+    // Update total otomatis
+    function updateTotal() {
+      const harga = parseFloat(hargaSatuanInput.value) || 0;
+      const jumlah = parseInt(jumlahBarangInput.value) || 0;
+      const total = harga * jumlah;
+      totalHargaInput.value = total;
+      kurangBtn.classList.toggle('hidden', jumlah <= 1);
+
+      // Munculkan tabel hanya jika harga & jumlah valid
+      if (harga > 0 && jumlah > 0 && namaBarangInput.value.trim() !== '') {
+        tabelContainer.classList.remove('hidden');
+        tambahAtauUpdateBaris();
+      }
+    }
+
+    jumlahBarangInput.addEventListener('input', updateTotal);
+    hargaSatuanInput.addEventListener('input', updateTotal);
+
+    tambahBtn.addEventListener('click', () => {
+      jumlahBarangInput.value = parseInt(jumlahBarangInput.value || 0) + 1;
+      updateTotal();
+    });
+
+    kurangBtn.addEventListener('click', () => {
+      const jumlah = Math.max(0, parseInt(jumlahBarangInput.value || 0) - 1);
+      jumlahBarangInput.value = jumlah;
+      updateTotal();
+    });
+
+    function tambahAtauUpdateBaris() {
+      const nama = namaBarangInput.value;
+      const harga = parseInt(hargaSatuanInput.value) || 0;
+      const jumlah = parseInt(jumlahBarangInput.value) || 0;
+      const total = harga * jumlah;
+
+      if (!nama) return;
+
+      const existingRow = [...tabelBarang.querySelectorAll('tr')].find(
+        row => row.children[0].textContent === nama
+      );
+
+      if (existingRow) {
+        existingRow.children[1].textContent = harga.toLocaleString();
+        existingRow.children[2].textContent = jumlah;
+        existingRow.children[3].textContent = total.toLocaleString();
+      } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="border p-1.5">${nama}</td>
+          <td class="border p-1.5 text-right">${harga.toLocaleString()}</td>
+          <td class="border p-1.5 text-center">${jumlah.toLocaleString()}</td>
+          <td class="border p-1.5 text-right">${total.toLocaleString()}</td>
+          <td class="border p-1.5 text-center">
+            <button type="button" class="hapusBtn text-red-600 hover:text-red-800 font-bold">✕</button>
+          </td>
+        `;
+        tabelBarang.appendChild(tr);
+      }
+
+      updateTotalKeseluruhan();
+      btnTambahBarang.classList.remove('hidden');
+      if(namaPembeli.value != ''){
+        checkBoxUtang.classList.remove('hidden');
+      }
+    }
+
+    function updateTotalKeseluruhan() {
+      const semuaTotal = [...tabelBarang.querySelectorAll('tr')].reduce((sum, row) => {
+        return sum + parseInt(row.children[3].textContent.replace(/\D/g, '') || 0);
+      }, 0);
+      totalKeseluruhan.textContent = semuaTotal.toLocaleString();
+    }
+
+    // Hapus baris dari tabel
+    tabelBarang.addEventListener('click', e => {
+      if (e.target.classList.contains('hapusBtn')) {
+        e.target.closest('tr').remove();
+        updateTotalKeseluruhan();
+      }
+    });
+
+    // Tombol tambah barang lainnya
+    btnTambahBarang.addEventListener('click', () => {
+      namaBarangInput.value = '';
+      hargaSatuanInput.value = '';
+      jumlahBarangInput.value = 1;
+      totalHargaInput.value = '';
+      btnTambahBarang.classList.add('hidden');
+      kurangBtn.classList.add('hidden');
+      namaBarangInput.focus();
+    });
+
+    // Checkbox utang
+    utangCheckbox.addEventListener('change', () => {
+      jumlahBayarContainer.classList.toggle('hidden', !utangCheckbox.checked);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Data Barang</title>
+</head>
+<body class="bg-gray-50 text-gray-700 p-3">
+  <h2 class="text-lg font-semibold mb-4 text-blue-700 text-center">📦 Data Barang</h2>
+
+  <!-- Tombol Aksi -->
+  <div class="flex gap-2 mb-4 justify-center overflow-x-auto">
+    <button class="flex-shrink-0 border-2 border-blue-500 text-blue-600 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 active:bg-blue-100 transition" id="tambahBtn">
+      ➕ Tambah Barang
+    </button>
+    <button class="flex-shrink-0 border-2 border-green-500 text-green-600 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-50 active:bg-green-100 transition">
+      ⬆️ Import CSV
+    </button>
+    <button class="flex-shrink-0 border-2 border-yellow-400 text-yellow-500 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-50 active:bg-yellow-100 transition">
+      ⬇️ Export CSV
+    </button>
+  </div>
+
+  <!-- Tabel Barang -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+    <table class="w-full text-sm">
+      <thead class="bg-blue-100 text-blue-700">
+        <tr>
+          <th class="p-2 border">Nama Barang</th>
+          <th class="p-2 border">Harga</th>
+          <th class="p-2 border w-24">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover:bg-blue-50">
+          <td class="border p-2">Sabun Mandi</td>
+          <td class="border p-2 text-right">Rp 5.000</td>
+          <td class="border p-2 text-center flex justify-center gap-1">
+            <button class="edit-btn border border-yellow-400 text-yellow-500 bg-white hover:bg-yellow-50 px-2 py-1 rounded text-xs font-medium"
+              data-nama="Sabun Mandi" data-harga="5000">✏️</button>
+            <button class="border border-red-500 text-red-500 bg-white hover:bg-red-50 px-2 py-1 rounded text-xs font-medium">🗑️</button>
+          </td>
+        </tr>
+
+        <tr class="bg-yellow-50 hover:bg-yellow-100">
+          <td class="border p-2">
+            ⭐ Mie Instan Pedas
+            <div class="text-xs text-gray-500 mt-1">
+              <span>1 pcs: Rp 2.000</span><br>
+              <span>2 pcs: Rp 3.500</span>
+            </div>
+          </td>
+          <td class="border p-2 text-right align-top">Rp 2.000 - Rp 3.500</td>
+          <td class="border p-2 text-center flex justify-center gap-1 align-top">
+            <button class="edit-btn border border-yellow-400 text-yellow-500 bg-white hover:bg-yellow-50 px-2 py-1 rounded text-xs font-medium"
+              data-nama="Mie Instan Pedas" data-harga="2000" data-spesial="true" data-spesial1="1,2000" data-spesial2="2,3500">✏️</button>
+            <button class="border border-red-500 text-red-500 bg-white hover:bg-red-50 px-2 py-1 rounded text-xs font-medium">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Tambah Barang -->
+  <div id="modalTambah" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-10 p-3">
+    <div class="bg-white w-full max-w-sm rounded-lg shadow-lg p-4">
+      <h3 class="text-lg font-semibold mb-3 text-blue-700 text-center">Tambah Barang</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nama Barang</label>
+          <input type="text" id="namaTambah" class="w-full border rounded p-2 text-sm" placeholder="Contoh: Mie Instan">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Harga Normal</label>
+          <input type="number" id="hargaTambah" class="w-full border rounded p-2 text-sm" placeholder="Contoh: 5000">
+        </div>
+
+        <!-- Harga Spesial -->
+        <div class="border-t pt-3">
+          <label class="flex items-center text-sm font-medium gap-2">
+            <input type="checkbox" id="hargaSpesialChk" class="accent-blue-600">
+            Barang ini memiliki harga spesial
+          </label>
+          <div id="hargaSpesialBox" class="hidden mt-2 space-y-2">
+            <div class="flex gap-2">
+              <input type="number" class="border rounded p-2 w-1/2 text-sm" placeholder="Qty (misal 1)">
+              <input type="number" class="border rounded p-2 w-1/2 text-sm" placeholder="Harga (misal 2000)">
+            </div>
+            <div class="flex gap-2">
+              <input type="number" class="border rounded p-2 w-1/2 text-sm" placeholder="Qty (misal 2)">
+              <input type="number" class="border rounded p-2 w-1/2 text-sm" placeholder="Harga (misal 3500)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button id="batalTambah" class="px-3 py-2 rounded border border-gray-400 bg-white hover:bg-gray-50 text-sm">Batal</button>
+        <button class="px-3 py-2 rounded border-2 border-blue-500 text-blue-600 bg-white hover:bg-blue-50 text-sm font-medium">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Barang -->
+  <div id="modalEdit" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-20 p-3">
+    <div class="bg-white w-full max-w-sm rounded-lg shadow-lg p-4">
+      <h3 class="text-lg font-semibold mb-3 text-blue-700 text-center">Edit Barang</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nama Barang</label>
+          <input type="text" id="namaEdit" class="w-full border rounded p-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Harga Normal</label>
+          <input type="number" id="hargaEdit" class="w-full border rounded p-2 text-sm">
+        </div>
+
+        <!-- Harga Spesial -->
+        <div class="border-t pt-3">
+          <label class="flex items-center text-sm font-medium gap-2">
+            <input type="checkbox" id="hargaSpesialEditChk" class="accent-blue-600">
+            Barang ini memiliki harga spesial
+          </label>
+          <div id="hargaSpesialEditBox" class="hidden mt-2 space-y-2">
+            <div class="flex gap-2">
+              <input type="number" id="editQty1" class="border rounded p-2 w-1/2 text-sm" placeholder="Qty">
+              <input type="number" id="editHarga1" class="border rounded p-2 w-1/2 text-sm" placeholder="Harga">
+            </div>
+            <div class="flex gap-2">
+              <input type="number" id="editQty2" class="border rounded p-2 w-1/2 text-sm" placeholder="Qty">
+              <input type="number" id="editHarga2" class="border rounded p-2 w-1/2 text-sm" placeholder="Harga">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button id="batalEdit" class="px-3 py-2 rounded border border-gray-400 bg-white hover:bg-gray-50 text-sm">Batal</button>
+        <button class="px-3 py-2 rounded border-2 border-blue-500 text-blue-600 bg-white hover:bg-blue-50 text-sm font-medium">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tambah Barang Modal
+    const tambahBtn = document.getElementById('tambahBtn');
+    const modalTambah = document.getElementById('modalTambah');
+    const batalTambah = document.getElementById('batalTambah');
+    const hargaSpesialChk = document.getElementById('hargaSpesialChk');
+    const hargaSpesialBox = document.getElementById('hargaSpesialBox');
+
+    tambahBtn.addEventListener('click', () => modalTambah.classList.remove('hidden'));
+    batalTambah.addEventListener('click', () => modalTambah.classList.add('hidden'));
+    hargaSpesialChk.addEventListener('change', () => {
+      hargaSpesialBox.classList.toggle('hidden', !hargaSpesialChk.checked);
+    });
+
+    // Edit Barang Modal
+    const modalEdit = document.getElementById('modalEdit');
+    const batalEdit = document.getElementById('batalEdit');
+    const hargaSpesialEditChk = document.getElementById('hargaSpesialEditChk');
+    const hargaSpesialEditBox = document.getElementById('hargaSpesialEditBox');
+    const editBtns = document.querySelectorAll('.edit-btn');
+
+    editBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('namaEdit').value = btn.dataset.nama;
+        document.getElementById('hargaEdit').value = btn.dataset.harga;
+        const isSpesial = btn.dataset.spesial === 'true';
+        hargaSpesialEditChk.checked = isSpesial;
+        hargaSpesialEditBox.classList.toggle('hidden', !isSpesial);
+        if (isSpesial) {
+          const [q1, h1] = btn.dataset.spesial1.split(',');
+          const [q2, h2] = btn.dataset.spesial2.split(',');
+          document.getElementById('editQty1').value = q1;
+          document.getElementById('editHarga1').value = h1;
+          document.getElementById('editQty2').value = q2;
+          document.getElementById('editHarga2').value = h2;
+        }
+        modalEdit.classList.remove('hidden');
+      });
+    });
+
+    batalEdit.addEventListener('click', () => modalEdit.classList.add('hidden'));
+    hargaSpesialEditChk.addEventListener('change', () => {
+      hargaSpesialEditBox.classList.toggle('hidden', !hargaSpesialEditChk.checked);
+    });
+  </script>
+</body>
+</html>
