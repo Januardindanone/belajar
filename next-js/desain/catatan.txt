@@ -1,3 +1,18 @@
 # tombol enter jangan save
 # live checkbox utang muncul saat ada nama pengguna
 # minimal nama pengguna  3 huruf
+
+
+// Routes CRUD Barang
+$f3->route('GET /barang', 'BarangController->index');
+$f3->route('GET /barang/create', 'BarangController->create');
+$f3->route('POST /barang/store', 'BarangController->store');
+$f3->route('GET /barang/@id', 'BarangController->show');
+$f3->route('GET /barang/@id/edit', 'BarangController->edit');
+$f3->route('POST /barang/@id/update', 'BarangController->update');
+$f3->route('GET /barang/@id/delete', 'BarangController->destroy');
+
+
+Model	Mengelola data dan operasi database	findAll(), create(), update(), delete()
+Controller	Mengatur alur aplikasi, menerima input, dan memanggil model	index(), store(), update(), destroy()
+View	Menampilkan data	barang/index.html, barang/edit.html
