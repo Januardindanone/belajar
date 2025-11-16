@@ -1,24 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Belajar React Dasar</title>
+	<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-
 	<div id="root"></div>
 
-	<!-- React dan ReactDOM dari CDN -->
-	<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+	<script type="text/babel">
+		function Button({isi, fungsi, disabled}){
+			return (<button onClick={fungsi} disabled={disabled}>{isi}</button>);
+		}
 
-	<!-- Babel untuk mendukung JSX -->
-	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		function Teks({isi}){
+			return (<span>{isi}</span>);
+		}
 
-	<script type="text/babel" src="app.js"></script>
+		function App() {
+		  const [angka, setAngka] = React.useState(0);
+		  const [disabled, setDisabled] = React.useState("disabled");
 
+
+		  function tambahAngka(){
+		  	if(angka < 9 ){
+			  	setAngka(angka + 1);
+		  	} else{
+		  		setAngka("Done !");
+		  		setDisabled("");
+		  	}
+		  }
+		  function kurangAngka(){
+		  	if(angka > 0){
+			  	setAngka(angka - 1);
+		  	}else{
+
+		  	}
+		  }
+		  function resetAngka(){
+		  	setAngka(0);
+		  	setDisabled("disabled");
+		  }
+
+
+
+		  return (
+			<>
+				<Button isi=" - " fungsi={kurangAngka} />
+				<Teks isi={angka} />
+				<Button isi=" + " fungsi={tambahAngka} />
+				<div>
+					<Button isi="reset" fungsi={resetAngka} disabled={disabled} />
+				</div>
+			</>
+		  );
+		}
+
+
+		ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+	</script>
 </body>
 </html>
-
-
