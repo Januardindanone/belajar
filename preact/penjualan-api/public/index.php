@@ -27,9 +27,12 @@ $f3->route('POST /api/barang', 'BarangController->create');
 $f3->route('PUT /api/barang/@id', 'BarangController->update');
 $f3->route('DELETE /api/barang/@id', 'BarangController->delete');
 $f3->route('POST /api/barang/import', 'BarangController->importCSV');
+
 $f3->route('GET /api/harga-spesial/@id_barang', 'HargaSpesialController->getAll');
 $f3->route('POST /api/harga-spesial/@id_barang', 'HargaSpesialController->create');
 $f3->route('DELETE /api/harga-spesial/@id', 'HargaSpesialController->delete');
+$f3->route('GET /api/pembeli', 'PembeliController->getAll');
+$f3->route('POST /api/penjualan', 'PenjualanController->create');
 
 
 

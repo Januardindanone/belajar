@@ -9,10 +9,6 @@ class Barang extends DB\SQL\Mapper {
         return $this->find();
     }
     public function create($data) {
-        if (empty($data['nama']) || !isset($data['harga'])) {
-            throw new \Exception('Nama dan harga wajib diisi');
-        }
-
         $this->copyFrom($data);
 
         try {
